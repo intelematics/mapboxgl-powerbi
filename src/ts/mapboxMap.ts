@@ -124,7 +124,6 @@ module powerbi.extensibility.visual {
         }
 
         private addMap() {
-            console.log("mapboxMap.ts @ addMap @ 127");
 
             if (this.map) {
                 return
@@ -246,9 +245,6 @@ module powerbi.extensibility.visual {
                 this.errorDiv.innerHTML = Templates.MissingCluster;
                 return false;
             }
-            console.log("mapboxMap.ts @ 248");
-            console.log(roles.latitude);
-            console.log(roles.longitude);
 
             return true;
         }
@@ -277,9 +273,6 @@ module powerbi.extensibility.visual {
 
         public updateLayers(dataView: DataView) {
             const features = mapboxConverter.convert(dataView);
-
-            console.log("mapboxMap.ts @ updateLayers");
-            console.log(features);
 
             this.palette.update(dataView, features);
 
@@ -342,12 +335,8 @@ module powerbi.extensibility.visual {
                 console.log('update options:', options)
                 return
             }
-            console.log("mapboxMap.ts @ 341");
-            console.log(options);
 
             this.settings = MapboxSettings.parse<MapboxSettings>(dataView);
-            console.log("mapboxMap.ts @ update");
-            console.log(this.settings);
 
             // EH: Hacky
             // if we're using choropleth, we want to auto zoom to the state's own default coord
@@ -357,9 +346,8 @@ module powerbi.extensibility.visual {
             if(this.settings.choropleth.show) {
                 const features = mapboxConverter.convert(dataView); // ~30k rows, suprisingly @ 30ms
                 let _state = features[0]['properties']['First state'];
-                console.log(_state);
-                if( _state != null || _state != undefined) {
-                    // sadly, hardcoded for now
+                if( _state != null || _state != undefined) { // if we can find the state
+                    // sadly, hardcoded for now, we've no easy way to pass in the report parameter, v2 soon plz
                     let _stateDefaultConfigs = {
                         "NSW": {
                             "lon"  : 151.1093,
