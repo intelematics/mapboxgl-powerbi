@@ -24,7 +24,7 @@
     - install pbiviz `2.6.0` - `npm i -g powerbi-visuals-tools@2.6.0`
 - now we should be set, for dev and package follow the steps: 
   - from my understanding, any js code change that needs recompile, will need to be compiled with nodejs `v1.5.0`
-  - also some hacky steps, please see [Hacky stuff to make things work](hack.md)
+  - also some hacky steps, please see [Hacky stuff to make things work](hacky.md)
   - then anything to with powerbi e.g. packaging will need to be run on nodejs `v6.0.0`
 - you can explore the various commands available in `package.json` -> `scripts` <br />
   to run them would be `npm run xxx`, e.g `npm run turf-build`

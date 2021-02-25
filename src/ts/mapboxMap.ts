@@ -124,6 +124,8 @@ module powerbi.extensibility.visual {
         }
 
         private addMap() {
+            console.log("mapboxMap.ts @ addMap @ 127");
+
             if (this.map) {
                 return
             }
@@ -244,6 +246,9 @@ module powerbi.extensibility.visual {
                 this.errorDiv.innerHTML = Templates.MissingCluster;
                 return false;
             }
+            console.log("mapboxMap.ts @ 248");
+            console.log(roles.latitude);
+            console.log(roles.longitude);
 
             return true;
         }
@@ -272,6 +277,9 @@ module powerbi.extensibility.visual {
 
         public updateLayers(dataView: DataView) {
             const features = mapboxConverter.convert(dataView);
+
+            console.log("mapboxMap.ts @ updateLayers");
+            console.log(features);
 
             this.palette.update(dataView, features);
 
@@ -334,8 +342,47 @@ module powerbi.extensibility.visual {
                 console.log('update options:', options)
                 return
             }
+            console.log("mapboxMap.ts @ 341");
+            console.log(options);
 
             this.settings = MapboxSettings.parse<MapboxSettings>(dataView);
+            console.log("mapboxMap.ts @ update");
+            console.log(this.settings);
+
+            // EH: Hacky
+            // if we're using choropleth, we want to auto zoom to the state's own default coord
+            // pseudo:
+            // - get first row of features from the dataView, it should have the state
+            // - use the state to get hardcoded settings for specific states
+            if(this.settings.choropleth.show) {
+                const features = mapboxConverter.convert(dataView); // ~30k rows, suprisingly @ 30ms
+                let _state = features[0]['properties']['First state'];
+                console.log(_state);
+                if( _state != null || _state != undefined) {
+                    // sadly, hardcoded for now
+                    let _stateDefaultConfigs = {
+                        "NSW": {
+                            "lon"  : 151.1093,
+                            "lat"  : -33.8688,
+                            "zoom" : 8
+                        },
+                        "VIC": {
+                            "lon"  : 144.9353,
+                            "lat"  : -37.8874,
+                            "zoom" : 8
+                        }
+                    }
+    
+                    // hacky overwrites
+                    this.settings.api.startLong = _stateDefaultConfigs[_state]["lon"];
+                    this.settings.api.startLat  = _stateDefaultConfigs[_state]["lat"];
+
+                    // this for the LGA was 7, we can have it override only when its not set
+                    if(this.settings.api.zoom==null || this.settings.api.zoom==undefined || this.settings.api.zoom==0) {
+                        this.settings.api.zoom      = _stateDefaultConfigs[_state]["zoom"];
+                    }
+                } 
+            }
 
             if (!this.validateOptions(options)) {
                 this.errorDiv.style.display = 'block';

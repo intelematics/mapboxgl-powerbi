@@ -14,6 +14,26 @@
       ]
     },
     {
+      "name": "choropleth_state",
+      "kind": "Measure",
+      "displayName": "State",
+      "description": "State of Choropleth features",
+      "requiredTypes": [
+        {
+          "numeric": true
+        },
+        {
+          "integer": true
+        },
+        {
+          "text": true
+        },
+        {
+          "bool": true
+        }
+      ]
+    },
+    {
       "name": "latitude",
       "kind": "GroupingOrMeasure",
       "displayName": "Latitude",
@@ -127,6 +147,9 @@
           "location": {
             "max": 1
           },
+          "choropleth_state": {
+            "max": 1
+          },
           "latitude": {
             "max": 1
           },
@@ -155,6 +178,11 @@
             {
               "for": {
                 "in": "location"
+              }
+            },
+            {
+              "for": {
+                "in": "choropleth_state"
               }
             },
             {
