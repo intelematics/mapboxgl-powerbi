@@ -348,15 +348,46 @@ module powerbi.extensibility.visual {
                 let _state = features[0]['properties']['First state'];
                 if( _state != null || _state != undefined) { // if we can find the state
                     // sadly, hardcoded for now, we've no easy way to pass in the report parameter, v2 soon plz
+                    // below coords sourced in gmaps in the url
                     let _stateDefaultConfigs = {
-                        "NSW": {
+                        "NSW": { // syd
                             "lon"  : 151.1093,
                             "lat"  : -33.8688,
                             "zoom" : 8
                         },
-                        "VIC": {
+                        "VIC": { // melb
                             "lon"  : 144.9353,
                             "lat"  : -37.8874,
+                            "zoom" : 8
+                        },
+                        "QLD": { // brisbane
+                            "lon"  : 152.7123,
+                            "lat"  : -27.3812,
+                            "zoom" : 8
+                        },
+                        "ACT": { // canberra
+                            "lon"  : 149.1248,
+                            "lat"  : -35.2812,
+                            "zoom" : 8
+                        },
+                        "SA": { // adelaide
+                            "lon"  : 138.3302,
+                            "lat"  : -34.9998,
+                            "zoom" : 8
+                        },
+                        "WA": { // perth
+                            "lon"  : 115.6806,
+                            "lat"  : -32.0391,
+                            "zoom" : 8
+                        },
+                        "NT": { // darwin
+                            "lon"  : 130.8630,
+                            "lat"  : -12.4257,
+                            "zoom" : 8
+                        },
+                        "TAZ": { // hobart
+                            "lon"  : 147.2330,
+                            "lat"  : -42.8344,
                             "zoom" : 8
                         }
                     }
