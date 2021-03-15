@@ -76,13 +76,31 @@ module powerbi.extensibility.visual {
                 source: 'choropleth-source',
                 "source-layer": sourceLayer
             });
-            layers[Choropleth.HighlightID] = mapboxUtils.decorateLayer({
-                id: Choropleth.HighlightID,
-                type: fillType.type,
-                source: 'choropleth-source',
-                "source-layer": sourceLayer,
-                filter: zeroFilter
-            });
+
+            // highlight
+            if(fillType.type=='line') { // line, no paint
+                layers[Choropleth.HighlightID] = mapboxUtils.decorateLayer({
+                    id: Choropleth.HighlightID,
+                    type: fillType.type,
+                    source: 'choropleth-source',
+                    "source-layer": sourceLayer,
+                    filter: zeroFilter
+                });
+            } else {
+                // default 
+                layers[Choropleth.HighlightID] = mapboxUtils.decorateLayer({
+                    id: Choropleth.HighlightID,
+                    type: fillType.type,
+                    source: 'choropleth-source',
+                    "source-layer": sourceLayer,
+                    filter: zeroFilter,
+                    paint: {
+                        "fill-color": choroSettings.highlightColor,
+                        "fill-opacity": 1
+                    }
+                });
+            }
+
             layers[Choropleth.HighlightOutlineID] = mapboxUtils.decorateLayer({
                 id: Choropleth.HighlightOutlineID,
                 type: 'line',
@@ -229,8 +247,10 @@ module powerbi.extensibility.visual {
         setCalculatedProps(map: any, colors: object, sizes: object | number, roleMap) {
             let fillType = this.getFillType(this.settings)
             map.setPaintProperty(Choropleth.ID, fillType.color, colors);
-            //this line is an extra bit for line width, if this is polygon, it will be ignored
-            map.setPaintProperty(Choropleth.ID, 'line-width', this.settings.outlineWidth);
+
+            if(fillType.type=='line') { // only set line-width if its line type
+                map.setPaintProperty(Choropleth.ID, 'line-width', this.settings.outlineWidth);
+            }
             map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-color', colors);
             if (roleMap.size) {
                 map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-height', sizes)
